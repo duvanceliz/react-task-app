@@ -1,11 +1,12 @@
 import { useState, useContext } from "react";
 import { TaskContext } from "../context/TaskContext";
+import Spinner from "./Spinner";
 
 
 
 function TaskForm() {
 
-  const { createTask } = useContext(TaskContext);
+  const { createTask, loading } = useContext(TaskContext);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,6 +20,8 @@ function TaskForm() {
     setDescription("");
     setTechnology("");
   };
+
+  
   return (
     <div className="max-w-md mx-auto">
       <form onSubmit={handleSubmit} className='bg-slate-800 p-10 rounded-md mb-4'>
@@ -48,6 +51,7 @@ function TaskForm() {
           setTechnology(e.target.value);
         }}
       />
+      {loading ? <Spinner/> :""}
       <button className="bg-green-700 p-2 rounded-md hover:bg-teal-400d text-white w-full">Guardar</button>
     </form>
     </div>

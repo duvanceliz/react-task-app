@@ -23,6 +23,7 @@ export function TaskContextProvider(props) {
       setTasks(response.data)
     } catch (error) {
       console.error(error);
+      setTasks(data)
     }
   }  
 
@@ -33,6 +34,10 @@ export function TaskContextProvider(props) {
 
   const [task, setTask] = useState({});
 
+  const [loading, setLoading] = useState(false);
+  const [loadingTwo, setLoadingTwo] = useState(false);
+
+
   async function createTask(taskTitle, taskDescription, taskTechnology) {
     
       const data = {
@@ -41,22 +46,28 @@ export function TaskContextProvider(props) {
         technology: taskTechnology
       }
     try {
+      setLoading(true)
       const response = await axios.post(url,data);
-      
       setTasks([...tasks, response.data ])
     } catch (error) {
+      setLoading(false)
       console.error(error);
+      setTasks([...tasks, data ])
     }
   }
 
   async function deleteTask(tasktId) {
     try {
+      setLoadingTwo(true)
       const response = await axios.delete(url+tasktId);
       console.log(response.statusText);
       setTasks(tasks.filter((task) => task.id !== tasktId));
       setSuccess("La acción se ha realizado con éxito")
     } catch (error) {
+      setLoadingTwo(false)
       console.error(error);
+      setTasks(tasks.filter((task) => task.id !== tasktId));
+      setSuccess("La acción se ha realizado con éxito")
     }
     
   }
@@ -96,7 +107,9 @@ export function TaskContextProvider(props) {
         success,
         taskEdit,
         findTaskById,
-        task
+        task,
+        loading,
+        loadingTwo
       }}
     >
       {props.children}
